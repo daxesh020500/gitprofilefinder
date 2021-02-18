@@ -4,7 +4,7 @@ import search from "@/store/modules/search";
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
-
+//Persistent Through Refreshes
 export default new Vuex.Store({
   modules: {
     search
