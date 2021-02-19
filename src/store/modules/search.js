@@ -25,7 +25,7 @@ const actions = {
     },
     async setUserDetails( {commit} ,userdetails){
         const response =
-            await axios.get("http://api.github.com/users/"+userdetails.login);
+            await axios.get("https://api.github.com/users/"+userdetails.login);
         console.log("Name : " + userdetails.login);
         console.log(response.data);
         commit("setUserDetails",response.data);
