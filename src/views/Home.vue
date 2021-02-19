@@ -4,19 +4,22 @@
     <div class="wrap">
       <div class="search">
         <input type="text" class="searchTerm" placeholder="Search a user " @input="Search" v-model="query" >
-        <button type="submit" class="searchButton" @submit="Search">
+        <button type="submit" title="Click Me for All results" class="searchButton" @click="Search(9,100,1)">
           <i class="fa fa-search"></i>
         </button>
       </div>
+      <br><br>
     </div>
     <div class="result">
       <ul>
+
         <li
-            v-for="results in getSearchResults"
+            v-for="results in getSearchResults.slice(0,5)"
             :key="results.id"
             class="search-item"
             @click="profilePage(results)">
-          {{ results.login }}
+          <img :src="results.avatar_url" style="height:60px;width:130px;">
+          <pre>    {{ results.login }}</pre>
         </li>
       </ul>
     </div>
@@ -28,6 +31,7 @@
 //import axios from 'axios'
 // import SearchResults from "@/components/SearchResults";
 import { mapGetters,mapActions } from 'vuex';
+import router from "@/router";
 
 export default {
   name: 'Home',
@@ -42,13 +46,18 @@ export default {
   computed: mapGetters(['getSearchItem','getSearchResults']),
   methods:{
     ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails"]),
-    async Search(){
+    async Search(e,perPage = 5,pageNumber = 1){
+      console.log(perPage + " Hello " + pageNumber)
       this.setSearchItem(this.query);
-      console.log(this.$store.getters.getSearchItem);
-      await this.fetchSearchResults(this.query)
+      //console.log(this.$store.getters.getSearchItem);
+      if(this.query !== "")
+      await this.fetchSearchResults([this.query,perPage,pageNumber]);
+      if(perPage!==5){
+        await router.push({name:"AllSearchResult"})
+      }
     },
     profilePage(results){
-      this.$router.push({name:"UserDetails"});
+      this.$router.push({name:"UserDetails",params:{username: results.login}});
       this.setUserDetails(results);
     }
   }
@@ -93,7 +102,9 @@ export default {
   list-style-type: none;
   display: flex;
   left:38%;
+  right: 40%;
   align-items: center;
+  text-align: center;
   background-color:beige;
   padding: 3px 5px;
   border-radius: 5px;
@@ -101,6 +112,9 @@ export default {
   font-size: 15px;
   color: #00B4CC;
   cursor: pointer;
+}
+li:hover{
+  background-color:#2c3e50 ;
 }
 .result{
   margin-top: 50px;

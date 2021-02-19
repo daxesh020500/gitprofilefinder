@@ -11,15 +11,24 @@ const getters = {
     getUserDetails: (state) => state.userDetails
 };
 const actions = {
-    async fetchSearchResults ({commit} ,username){
-        const response =  await axios.get(`https://api.github.com/search/users?q=${username}`);
-        commit("setSearchResults",response.data.items);
+    async fetchSearchResults ({commit} ,params){
+        console.log("Inside Action " + params[0] + "   " + params[1] + "  "  +  params[2])
+        const response =
+            await axios.get(`https://api.github.com/search/users?q=${params[0]}&per_page=${params[1]}&page=${params[2]}`);
+        //console.log("No of Users found " + response.data.total_count)
+        if(response.data.total_count !== 0)
+            commit("setSearchResults",response.data.items);
     },
     setSearchItem( {commit} ,searchItem){
-        commit("setSearchItem",searchItem);
+        if(searchItem !== "")
+            commit("setSearchItem",searchItem);
     },
-    setUserDetails( {commit} ,userdetails){
-        commit("setUserDetails",userdetails);
+    async setUserDetails( {commit} ,userdetails){
+        const response =
+            await axios.get("http://api.github.com/users/"+userdetails.login);
+        console.log("Name : " + userdetails.login);
+        console.log(response.data);
+        commit("setUserDetails",response.data);
     }
 };
 const mutations = {
