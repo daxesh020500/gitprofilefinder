@@ -23,10 +23,10 @@ const actions = {
         if(searchItem !== "")
             commit("setSearchItem",searchItem);
     },
-    async setUserDetails( {commit} ,username){
+    async setUserDetails( {commit} ,userdetails){
         const response =
-            await axios.get("https://api.github.com/users/"+username);
-        console.log("Name : " + username);
+            await axios.get("https://api.github.com/users/"+userdetails.login);
+        console.log("Name : " + userdetails.login);
         console.log(response.data);
         commit("setUserDetails",response.data);
     }
