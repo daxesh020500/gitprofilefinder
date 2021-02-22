@@ -1,40 +1,36 @@
 <template>
-  <div>
 <h2>
   Welcome to  {{ getUserDetails.login }} 's profile
-</h2>
   <br>
   <div class="card">
     <img v-if="getUserDetails.avatar_url" :src="getUserDetails.avatar_url" :alt="'GitHub Avatar for '+ getUserDetails.login">
-    <h4>Joined Github On  {{getUserDetails.created_at}}</h4>
-    <h4>{{getUserDetails.login}}</h4>
-    <h4 v-if="getUserDetails.url" >
+    <h5>Joined Github On  {{getUserDetails.created_at}}</h5>
+    <h5>{{getUserDetails.login}}</h5>
+    <h5 v-if="getUserDetails.url" >
       <a :href="getUserDetails.html_url">Go to Github Profile
         <i class="fab fa-github-square"></i>
       </a>
-    </h4>
-    <h4>
+    </h5>
+    <h5>
       <a :href= "getUserDetails.html_url"> Go to Repos</a>
-    </h4>
-    <h4 v-if="getUserDetails.location">Origin : {{getUserDetails.location}}</h4>
+    </h5>
+    <h5 v-if="getUserDetails.location">Origin : {{getUserDetails.location}}</h5>
     <i v-if="getUserDetails.email">Email => {{ getUserDetails.email }}</i>
-    <h4>No of Followers : {{ getUserDetails.followers}}</h4>
-    <h4>No of Followings : {{getUserDetails.following}}</h4>
+    <h5>No of Followers : {{ getUserDetails.followers}}</h5>
+    <h5>No of Followings : {{getUserDetails.following}}</h5>
   </div>
-  </div>
+</h2>
 </template>
 
 <script>
-import { mapGetters, mapActions} from 'vuex';
+import { mapGetters} from 'vuex';
 export default {
   name: "UserDetails",
   computed: mapGetters(["getUserDetails"]),
   methods:{
-    ...mapActions(["setUserDetails"]),
   },
   created() {
     console.log(this.$route.params.username);
-    this.setUserDetails(this.$route.params.username);
   }
 }
 </script>
@@ -47,7 +43,10 @@ export default {
   text-align: center;
 }
 
-
+.title {
+  color: grey;
+  font-size: 18px;
+}
 
 button {
   border: none;
