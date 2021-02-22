@@ -58,7 +58,7 @@ export default {
     },
     profilePage(results){
       this.$router.push({name:"UserDetails",params:{username: results.login}});
-      this.setUserDetails(results);
+      this.setUserDetails(results.login);
     }
   }
 }
