@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <img  alt="Vue logo" src="../assets/gitlogo.png">
+    <img alt="Vue logo" src="../assets/gitlogo.png">
     <div class="wrap">
       <div class="search">
-        <input type="text" class="searchTerm" placeholder="Search a user " @input="Search()" v-model="query">
-        <button type="submit" title="Click Me for All results" class="searchButton" @click="Search(100,1)">
+        <input type="text" class="searchTerm" placeholder="Search a user " @input="Search" v-model="query" >
+        <button type="submit" title="Click Me for All results" class="searchButton" @click="Search(9,100,1)">
           <i class="fa fa-search"></i>
         </button>
       </div>
@@ -18,8 +18,8 @@
             :key="results.id"
             class="search-item"
             @click="profilePage(results)">
-          <img class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
-          <span class="result-text"> {{results.login}}</span>
+          <img :src="results.avatar_url" style="height:60px;width:130px;">
+          <pre>    {{ results.login }}</pre>
         </li>
       </ul>
     </div>
@@ -46,7 +46,7 @@ export default {
   computed: mapGetters(['getSearchItem','getSearchResults']),
   methods:{
     ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails"]),
-    async Search(perPage = 5,pageNumber = 1){
+    async Search(e,perPage = 5,pageNumber = 1){
       console.log(perPage + " Hello " + pageNumber)
       this.setSearchItem(this.query);
       //console.log(this.$store.getters.getSearchItem);
@@ -58,7 +58,7 @@ export default {
     },
     profilePage(results){
       this.$router.push({name:"UserDetails",params:{username: results.login}});
-      this.setUserDetails(results.login);
+      this.setUserDetails(results);
     }
   }
 }
@@ -117,17 +117,8 @@ li:hover{
   background-color:#2c3e50 ;
 }
 .result{
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-}
-.result-text{
-  padding: 30px;
-}
-.profile-pic{
-  border-radius:50%;
-  image-resolution: from-image;
-  border: 1px solid green;
-  height: 100px;
+  margin-top: 50px;
+  align-items: center;
+  align-content: center;
 }
 </style>

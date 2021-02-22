@@ -7,8 +7,8 @@
           :key="results.id"
           class="search-item"
           @click="profilePage(results)">
-        <img class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
-        <span class="result-text">{{ results.login }} </span>
+        <img :src="results.avatar_url" style="height:60px;width:130px;">
+        <pre>    {{ results.login }}</pre>
       </li>
     </ul>
   </div>
@@ -54,15 +54,6 @@ export default {
 }
 li:hover{
   background-color:#2c3e50 ;
-}
-.result-text{
-  padding: 30px;
-}
-.profile-pic{
-  border-radius:50%;
-  image-resolution: from-image;
-  border: 1px solid green;
-  height: 100px;
 }
 .result{
   margin-top: 50px;
