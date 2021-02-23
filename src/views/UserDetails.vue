@@ -5,7 +5,7 @@
 </h2>
   <br>
   <div class="card">
-    <img v-if="getUserDetails.avatar_url" :src="getUserDetails.avatar_url" :alt="'GitHub Avatar for '+ getUserDetails.login">
+    <img class="profile-pic" v-if="getUserDetails.avatar_url" :src="getUserDetails.avatar_url" :alt="'GitHub Avatar for '+ getUserDetails.login">
     <h4>Joined Github On  {{getUserDetails.created_at}}</h4>
     <h4>{{getUserDetails.login}}</h4>
     <h4 v-if="getUserDetails.url" >
@@ -46,9 +46,6 @@ export default {
   margin: auto;
   text-align: center;
 }
-
-
-
 button {
   border: none;
   outline: 0;
@@ -64,23 +61,21 @@ button {
 a:link {
   color: red;
 }
-
-/* visited link */
 a:visited {
   color: green;
 }
-
-/* mouse over link */
 a:hover {
   color: hotpink;
 }
-
 h4{
   cursor: pointer;
 }
-
-/* selected link */
 a:active {
   color: blue;
+}
+.profile-pic{
+  border-radius:50%;
+  image-resolution: from-image;
+  border: 1px solid green;
 }
 </style>
