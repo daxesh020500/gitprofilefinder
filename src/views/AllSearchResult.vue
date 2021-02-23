@@ -6,7 +6,7 @@
           v-for="results in getSearchResults"
           :key="results.id"
           class="search-item"
-          @click="profilePage(results)">
+          @click="profilePage(results.login)">
         <img class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
         <span class="result-text">{{ results.login }} </span>
       </li>
@@ -22,9 +22,9 @@ export default {
   computed: mapGetters(['getSearchItem','getSearchResults']),
   methods:{
     ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails"]),
-    profilePage(results){
-      this.$router.push({name:"UserDetails"});
-      this.setUserDetails(results);
+    async profilePage(username){
+      await this.setUserDetails(username);
+      this.$router.push({name:"UserDetails",params:{username: username}});
     }
   }
 }

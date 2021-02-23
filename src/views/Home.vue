@@ -3,7 +3,7 @@
     <img  alt="Vue logo" src="../assets/gitlogo.png">
     <div class="wrap">
       <div class="search">
-        <input type="text" class="searchTerm" placeholder="Search a user " @input="Search()" v-model="query">
+        <input type="text" class="searchTerm" placeholder="Search a User"  @input="Search()" v-model="query">
         <button type="submit" title="Click Me for All results" class="searchButton" @click="Search(100,1)">
           <i class="fa fa-search"></i>
         </button>
@@ -17,7 +17,7 @@
             v-for="results in getSearchResults.slice(0,5)"
             :key="results.id"
             class="search-item"
-            @click="profilePage(results)">
+            @click="profilePage(results.login)">
           <img class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
           <span class="result-text"> {{results.login}}</span>
         </li>
@@ -56,9 +56,9 @@ export default {
         await router.push({name:"AllSearchResult"})
       }
     },
-    async profilePage(results){
-      await this.setUserDetails(results.login);
-      this.$router.push({name:"UserDetails",params:{username: results.login}});
+    async profilePage(username){
+      await this.setUserDetails(username);
+      this.$router.push({name:"UserDetails",params:{username: username}});
     }
   }
 }
