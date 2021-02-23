@@ -56,9 +56,9 @@ export default {
         await router.push({name:"AllSearchResult"})
       }
     },
-    profilePage(results){
+    async profilePage(results){
+      await this.setUserDetails(results.login);
       this.$router.push({name:"UserDetails",params:{username: results.login}});
-      this.setUserDetails(results.login);
     }
   }
 }

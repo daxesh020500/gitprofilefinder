@@ -34,7 +34,8 @@ export default {
   },
   created() {
     console.log(this.$route.params.username);
-    this.setUserDetails(this.$route.params.username);
+    if(this.getUserDetails.login !== this.$route.params.username)
+      this.setUserDetails(this.$route.params.username);
   }
 }
 </script>
