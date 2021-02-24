@@ -7,14 +7,14 @@
       <li
           v-for="results in getSearchResults"
           :v-model="getSearchResults"
-          :key="results.id"
+          :key="results.login"
           class="search-item"
           @click="profilePage(results.login)">
-        <img class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
+        <img  class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
         <span class="result-text">{{ results.login }} </span>
       </li>
     </ul>
-    <button @click="loadMore(getSearchResults.length)" class="button" type="button">Load More</button>
+    <button @click="loadMore" class="button" v-show="isAllResultsFetched">Load More {{isAllResultsFetched}}</button>
   </div>
 </template>
 
@@ -22,20 +22,27 @@
 import {mapActions, mapGetters} from 'vuex';
 export default {
   name: "AllSearchResult",
-  computed: mapGetters(['getSearchItem','getSearchResults','getTotalCount']),
+  computed: {
+    ...mapGetters(['getSearchItem','getSearchResults','getTotalCount']),
+    isAllResultsFetched() {
+      return this.getSearchResults.length < this.$store.getters.getTotalCount
+    }
+  },
   methods:{
     ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails","appendSearchResult"]),
     async profilePage(username){
       await this.setUserDetails(username);
       this.$router.push({name:"UserDetails",params:{username: username}});
     },
-    loadMore(currentResultLength){
+    loadMore(){
       //console.log("Current : " + currentResultLength);
       //console.log("Total Results " + this.$store.getters.getTotalCount);
-      if(currentResultLength < this.$store.getters.getTotalCount){
+      if(this.getSearchResults.length < this.$store.getters.getTotalCount){
         //console.log("Condition Satisfied")
-        this.appendSearchResult([this.$route.params.searchTerm,100,(currentResultLength /100 ) + 1])
-        currentResultLength = currentResultLength + 100;
+        this.appendSearchResult([this.$route.params.searchTerm,100,(this.getSearchResults.length /100 ) + 1])
+      }
+      else{
+        window.alert("All Results Fetched")
       }
     }
   },
