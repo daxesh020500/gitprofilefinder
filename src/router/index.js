@@ -27,7 +27,7 @@ const routes = [
    component: () => import( '../views/UserDetails.vue')
   },
   {
-    path: '/allresults',
+    path: '/allresults/:searchTerm&perpage=:perPage&page=:pageNumber',
     name: "AllSearchResult",
 
     component: () => import('../views/AllSearchResult.vue')

@@ -31,7 +31,6 @@
 //import axios from 'axios'
 // import SearchResults from "@/components/SearchResults";
 import { mapGetters,mapActions } from 'vuex';
-import router from "@/router";
 
 export default {
   name: 'Home',
@@ -47,13 +46,18 @@ export default {
   methods:{
     ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails"]),
     async Search(perPage = 5,pageNumber = 1){
-      console.log(perPage + " Hello " + pageNumber)
+      //console.log(perPage + " Hello " + pageNumber)
       this.setSearchItem(this.query);
       //console.log(this.$store.getters.getSearchItem);
       if(this.query !== "")
       await this.fetchSearchResults([this.query,perPage,pageNumber]);
       if(perPage!==5){
-        await router.push({name:"AllSearchResult"})
+        await this.$router.push({name:"AllSearchResult",
+          params: {
+            searchTerm: this.query,
+            pageNumber: pageNumber,
+            perPage: perPage
+          }})
       }
     },
     async profilePage(username){
@@ -71,7 +75,6 @@ export default {
   position: absolute;
   display: flex;
 }
-
 .searchTerm {
   width: 100%;
   border: 3px solid #00B4CC;
