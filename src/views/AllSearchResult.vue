@@ -14,7 +14,9 @@
         <span class="result-text">{{ results.login }} </span>
       </li>
     </ul>
-    <button @click="loadMore" class="button" v-show="isAllResultsFetched">Load More {{isAllResultsFetched}}</button>
+    <button @click="loadMore" class="button" v-show="isAllResultsFetched">Load More
+      {{this.$store.getters.getTotalCount - getSearchResults.length}} left
+    </button>
   </div>
 </template>
 
@@ -106,7 +108,7 @@ li:hover{
   margin-bottom: 10px;
   background: dodgerblue;
   text-align: center;
-  width: 10vw;
+  width: 15vw;
   color: chartreuse;
   border-radius: 25px;
   cursor: pointer;
