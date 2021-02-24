@@ -1,17 +1,22 @@
 <template>
   <div class="wrap">
-  <div class="result">
-    <ul>
+    <h4 :v-model="getTotalCount">Total Results Fetched : {{ getTotalCount }}</h4>
+    <h5> Press Load More to get More...</h5>
+    <h5 :v-model="getSearchResults.length">Size of Array {{getSearchResults.length}}</h5>
+  <ul class="result">
       <li
           v-for="results in getSearchResults"
-          :key="results.id"
+          :v-model="getSearchResults"
+          :key="results.login"
           class="search-item"
-          @click="profilePage(results)">
-        <img :src="results.avatar_url" style="height:60px;width:130px;">
-        <pre>    {{ results.login }}</pre>
+          @click="profilePage(results.login)">
+        <img  class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
+        <span class="result-text">{{ results.login }} </span>
       </li>
     </ul>
-  </div>
+    <button @click="loadMore" class="button" v-show="isAllResultsFetched">Load More
+      {{this.$store.getters.getTotalCount - getSearchResults.length}} left
+    </button>
   </div>
 </template>
 
@@ -19,23 +24,48 @@
 import {mapActions, mapGetters} from 'vuex';
 export default {
   name: "AllSearchResult",
-  computed: mapGetters(['getSearchItem','getSearchResults']),
-  methods:{
-    ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails"]),
-    profilePage(results){
-      this.$router.push({name:"UserDetails"});
-      this.setUserDetails(results);
+  computed: {
+    ...mapGetters(['getSearchItem','getSearchResults','getTotalCount']),
+    isAllResultsFetched() {
+      return this.getSearchResults.length < this.$store.getters.getTotalCount
     }
-  }
+  },
+  methods:{
+    ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails","appendSearchResult"]),
+    async profilePage(username){
+      await this.setUserDetails(username);
+      this.$router.push({name:"UserDetails",params:{username: username}});
+    },
+    loadMore(){
+      //console.log("Current : " + currentResultLength);
+      //console.log("Total Results " + this.$store.getters.getTotalCount);
+      if(this.getSearchResults.length < this.$store.getters.getTotalCount){
+        //console.log("Condition Satisfied")
+        this.appendSearchResult([this.$route.params.searchTerm,100,(this.getSearchResults.length /100 ) + 1])
+      }
+      else{
+        window.alert("All Results Fetched")
+      }
+    }
+  },
+  async created() {
+    //console.log("Inside Created ")
+    //console.log(this.$route.params.searchTerm + " ::: " +this.$route.params.perPage + ":::" + this.$route.params.pageNumber)
+    //console.log(this.$store.getters.getSearchResults)
+    this.fetchSearchResults([this.$route.params.searchTerm,this.$route.params.perPage,this.$route.params.pageNumber])
+  },
 }
 </script>
 
 <style scoped>
 .wrap{
-  width: 30%;
+  width: 60vw;
   position: absolute;
-  left: 35.5%;
-  margin-top: 5px;
+  alignment: center;
+  margin-left: 20vw;
+  margin-right: 20vw;
+  box-sizing: border-box;
+  border: 2px solid cadetblue;
 }
 .search-item{
   list-style-type: none;
@@ -55,9 +85,32 @@ export default {
 li:hover{
   background-color:#2c3e50 ;
 }
+.result-text{
+  padding: 30px;
+}
+.profile-pic{
+  border-radius:50%;
+  image-resolution: from-image;
+  border: 1px solid green;
+  height: 100px;
+}
 .result{
-  margin-top: 50px;
   align-items: center;
   align-content: center;
+  max-height: 90vh;
+  overflow: scroll;
+  padding: 0px;
+  margin: 0px;
+}
+.button{
+  padding: 5px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  background: dodgerblue;
+  text-align: center;
+  width: 15vw;
+  color: chartreuse;
+  border-radius: 25px;
+  cursor: pointer;
 }
 </style>

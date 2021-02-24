@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/gitlogo.png">
+    <img  alt="Vue logo" src="../assets/gitlogo.png">
     <div class="wrap">
       <div class="search">
-        <input type="text" class="searchTerm" placeholder="Search a user " @input="Search" v-model="query" >
-        <button type="submit" title="Click Me for All results" class="searchButton" @click="Search(9,100,1)">
+        <input type="text" class="searchTerm" placeholder="Search a User"  @input="Search()" v-model="query">
+        <button type="submit" title="Click Me for All results" class="searchButton" @click="Search(100,1)">
           <i class="fa fa-search"></i>
         </button>
       </div>
@@ -17,9 +17,9 @@
             v-for="results in getSearchResults.slice(0,5)"
             :key="results.id"
             class="search-item"
-            @click="profilePage(results)">
-          <img :src="results.avatar_url" style="height:60px;width:130px;">
-          <pre>    {{ results.login }}</pre>
+            @click="profilePage(results.login)">
+          <img class="profile-pic" :src="results.avatar_url" alt="Profile Picture">
+          <span class="result-text"> {{results.login}}</span>
         </li>
       </ul>
     </div>
@@ -31,7 +31,6 @@
 //import axios from 'axios'
 // import SearchResults from "@/components/SearchResults";
 import { mapGetters,mapActions } from 'vuex';
-import router from "@/router";
 
 export default {
   name: 'Home',
@@ -46,19 +45,24 @@ export default {
   computed: mapGetters(['getSearchItem','getSearchResults']),
   methods:{
     ...mapActions(["fetchSearchResults","setSearchItem","setUserDetails"]),
-    async Search(e,perPage = 5,pageNumber = 1){
-      console.log(perPage + " Hello " + pageNumber)
+    async Search(perPage = 5,pageNumber = 1){
+      //console.log(perPage + " Hello " + pageNumber)
       this.setSearchItem(this.query);
       //console.log(this.$store.getters.getSearchItem);
       if(this.query !== "")
       await this.fetchSearchResults([this.query,perPage,pageNumber]);
       if(perPage!==5){
-        await router.push({name:"AllSearchResult"})
+        await this.$router.push({name:"AllSearchResult",
+          params: {
+            searchTerm: this.query,
+            pageNumber: pageNumber,
+            perPage: perPage
+          }})
       }
     },
-    profilePage(results){
-      this.$router.push({name:"UserDetails",params:{username: results.login}});
-      this.setUserDetails(results);
+    async profilePage(username){
+      await this.setUserDetails(username);
+      this.$router.push({name:"UserDetails",params:{username: username}});
     }
   }
 }
@@ -71,7 +75,6 @@ export default {
   position: absolute;
   display: flex;
 }
-
 .searchTerm {
   width: 100%;
   border: 3px solid #00B4CC;
@@ -117,8 +120,17 @@ li:hover{
   background-color:#2c3e50 ;
 }
 .result{
-  margin-top: 50px;
-  align-items: center;
-  align-content: center;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+.result-text{
+  padding: 30px;
+}
+.profile-pic{
+  border-radius:50%;
+  image-resolution: from-image;
+  border: 1px solid green;
+  height: 100px;
 }
 </style>
