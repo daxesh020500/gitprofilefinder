@@ -25,7 +25,7 @@ const actions = {
         }
     },
     async appendSearchResult({commit} ,params){
-        console.log("Inside Append : " + params[0] + "   " + params[1] + "  " + params[2] )
+        //console.log("Inside Append : " + params[0] + "   " + params[1] + "  " + params[2] )
         const response =
             await axios.
             get(`https://api.github.com/search/users?q=${params[0]}&per_page=${params[1]}&page=${params[2]}`)

@@ -8,6 +8,15 @@
           <i class="fa fa-search"></i>
         </button>
       </div>
+      <br><br><br>
+      <div>
+        <button type="submit" title="Clipboard Test" @click="getClipBoardData()">
+          Click Me for Getting Clipboard Data
+        </button>
+      </div>
+      <div class="TextBorder">
+        <p class="Text"></p>
+      </div>
       <br><br>
     </div>
     <div class="result">
@@ -63,6 +72,15 @@ export default {
     async profilePage(username){
       await this.setUserDetails(username);
       this.$router.push({name:"UserDetails",params:{username: username}});
+    },
+    getClipBoardData() {
+      navigator.clipboard.readText().then(
+          (clipText) => {
+            document.getElementsByClassName('Text')[0].innerHTML = clipText
+            console.log(clipText.length)
+          }
+      )
+
     }
   }
 }
@@ -132,5 +150,8 @@ li:hover{
   image-resolution: from-image;
   border: 1px solid green;
   height: 100px;
+}
+.TextBorder{
+  border: #00B4CC;
 }
 </style>
