@@ -10,7 +10,7 @@
       </div>
       <br><br><br>
       <div>
-        <button type="submit" title="Clipboard Test" @click="getClipBoardData()">
+        <button type="button" title="Clipboard Test" @click="getClipBoardData()">
           Click Me for Getting Clipboard Data
         </button>
       </div>
